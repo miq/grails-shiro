@@ -110,7 +110,7 @@ class ShiroGrailsExceptionResolver extends SimpleMappingExceptionResolver implem
             }
             parentThrowable = childThrowable
         }
-        return e
+        return null
     }
 
     protected void loginRedirect(HttpServletRequest request, HttpServletResponse response) {
