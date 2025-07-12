@@ -147,6 +147,15 @@ class ShiroExceptionResolverSpec extends Specification implements GrailsUnitTest
         ShiroGrailsExceptionResolver.findAuthException(new Exception("wrap",uax)) == uax
         ShiroGrailsExceptionResolver.findAuthException(new Exception("wrap",aux)) == aux
 
+        when:
+        Exception ise = new IllegalStateException("Some exception thrown in the app.")
+        Exception reWrap = new RuntimeException("An exception occured!",aux)
+        Exception re = new RuntimeException("An exception occured!")
+
+        then: "Should find only AuthorizationException, otherwise null"
+        ShiroGrailsExceptionResolver.findAuthException(reWrap) == aux
+        ShiroGrailsExceptionResolver.findAuthException(ise) == null
+        ShiroGrailsExceptionResolver.findAuthException(re) == null
     }
 
     void "resolving exceptions should work"() {
