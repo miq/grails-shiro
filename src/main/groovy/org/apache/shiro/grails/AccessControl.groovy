@@ -18,9 +18,9 @@ package org.apache.shiro.grails
 import grails.core.GrailsApplication
 import groovy.transform.CompileStatic
 import groovy.transform.TypeChecked
+import jakarta.servlet.http.HttpServletRequest
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.subject.Subject
-import javax.servlet.http.HttpServletRequest
 import grails.artefact.Interceptor
 
 @CompileStatic

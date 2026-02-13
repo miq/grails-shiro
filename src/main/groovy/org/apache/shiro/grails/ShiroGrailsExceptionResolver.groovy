@@ -20,6 +20,8 @@ import grails.core.support.GrailsApplicationAware
 import grails.web.mapping.LinkGenerator
 import grails.web.mapping.ResponseRedirector
 import grails.web.mapping.mvc.RedirectEventListener
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.apache.shiro.authz.AuthorizationException
 import org.apache.shiro.authz.UnauthenticatedException
 import org.codehaus.groovy.runtime.ScriptBytecodeAdapter
@@ -29,8 +31,6 @@ import org.springframework.web.servlet.ModelAndView
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver
 import org.springframework.web.servlet.support.RequestDataValueProcessor
 
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 /**
  * User: pmcneil

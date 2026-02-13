@@ -31,6 +31,7 @@ import grails.core.ArtefactHandler
 
 import grails.core.GrailsClass
 import grails.plugins.Plugin
+import jakarta.servlet.DispatcherType
 import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator
 import org.apache.shiro.authz.permission.WildcardPermissionResolver
@@ -51,8 +52,6 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.core.Ordered
 import java.security.InvalidKeyException
-import static javax.servlet.DispatcherType.ERROR
-import static javax.servlet.DispatcherType.REQUEST
 
 class ShiroGrailsPlugin extends Plugin {
 
@@ -228,7 +227,7 @@ Enables Grails applications to take advantage of the Apache Shiro security layer
             servletShiroFilter(FilterRegistrationBean) {
                 filter = ref('shiroFilter')
                 urlPatterns = ['/*']
-                dispatcherTypes = EnumSet.of(REQUEST, ERROR)
+                dispatcherTypes = EnumSet.of(DispatcherType.REQUEST, DispatcherType.ERROR)
                 order = Ordered.HIGHEST_PRECEDENCE + 1000
             }
             log.info 'Security layer configured.'
