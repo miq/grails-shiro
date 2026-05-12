@@ -18,15 +18,9 @@
     </root>
 
     <springProfile name="development">
+        <root level="ERROR"/>
         <logger name="StackTrace" level="ERROR" />
-
-<!--        <logger name="grails.plugins.elasticsearch" level="DEBUG"/>-->
-
-<!--        <logger name="org.hibernate.SQL" level="DEBUG"/>-->
-<!--        <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>-->
-<!--        <logger name="org.springframework.security" level="TRACE"/>-->
-
-<!--        <root level="WARN"/>-->
+        <logger name="org.apache.shiro.web" level="DEBUG"/>
     </springProfile>
 
 <!--    logging to a file-->

@@ -9,6 +9,8 @@ class AuthInterceptor {
     //customize me
     int order = HIGHEST_PRECEDENCE+100
 
-    boolean before() { true }
+    boolean before() {
+        true
+    }
     boolean after() { true }
 }

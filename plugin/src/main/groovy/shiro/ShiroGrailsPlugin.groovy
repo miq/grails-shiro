@@ -41,6 +41,7 @@ import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO
 import org.apache.shiro.spring.LifecycleBeanPostProcessor
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter
+import org.apache.shiro.web.filter.mgt.DefaultFilter
 import org.apache.shiro.web.mgt.CookieRememberMeManager
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager
 import org.apache.shiro.web.servlet.SimpleCookie
@@ -210,10 +211,15 @@ Enables Grails applications to take advantage of the Apache Shiro security layer
                 loginUrl = grailsApplication.config.getProperty('security.shiro.filter.loginUrl', String, "/auth/login")
                 unauthorizedUrl = grailsApplication.config.getProperty('security.shiro.filter.unauthorizedUrl', String, "/auth/unauthorized")
                 successUrl = grailsApplication.config.getProperty('security.shiro.filter.successUrl')
-
+                allowAccessByDefault = grailsApplication.config.getProperty('security.shiro.filter.allowAccessByDefault')
                 if (grailsApplication.config.getProperty('security.shiro.filter.filterChainDefinitions')) {
                     filterChainDefinitions = grailsApplication.config.getProperty('security.shiro.filter.filterChainDefinitions')
                 }
+                // FIXME: is this the correct way?
+                filterChainDefinitionMap = [
+                        ("/${grailsApplication.config.getProperty('security.shiro.login.controller', String, 'auth')}/**".toString()): DefaultFilter.anon.name(),
+                        '/assets/**' : DefaultFilter.anon.name()
+                ]
 
                 if (enableBasicFilter) {
                     filters = [authcBasic: ref("authcBasicFilter")]

@@ -68,6 +68,16 @@ grails:
         scriptlets: html
         taglib: none
         staticparts: none
+---
+security:
+  shiro:
+    login:
+      controller: auth
+      action: login
+    filter:
+      loginUrl: /auth/login
+      successUrl: /
+      allowAccessByDefault: false
 
 ---
 dataSource:
