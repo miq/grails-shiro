@@ -3,6 +3,7 @@ package org.apache.shiro.grails
 import grails.config.Config
 import grails.core.GrailsApplication
 import grails.web.mapping.ResponseRedirector
+import jakarta.servlet.http.HttpServletResponse
 import org.apache.shiro.authz.AuthorizationException
 import org.apache.shiro.authz.UnauthenticatedException
 import org.grails.plugins.testing.GrailsMockHttpServletRequest
@@ -10,8 +11,6 @@ import org.grails.testing.GrailsUnitTest
 import org.springframework.web.servlet.ModelAndView
 import spock.lang.Specification
 
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 import java.lang.reflect.InvocationTargetException
 
 /**

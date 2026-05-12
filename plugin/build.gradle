@@ -17,19 +17,15 @@ dependencies {
 
     developmentOnly "org.springframework.boot:spring-boot-devtools" // Spring Boot DevTools may cause performance slowdowns or compatibility issues on larger applications
 
-    ['ehcache', 'core', 'spring', 'web'].each { pkg ->
-        implementation("org.apache.shiro:shiro-$pkg:$shiroVersion") {
-            exclude module: 'ejb'
-            exclude module: 'jsf-api'
-            exclude module: 'servlet-api'
-            exclude module: 'jsp-api'
-            exclude module: 'jstl'
-            exclude module: 'jms'
-            exclude module: 'connector-api'
-            exclude module: 'ehcache-core'
-            exclude module: 'slf4j-api'
-            exclude module: 'commons-logging'
-        }
+    ['core', 'spring', 'web'].each { pkg ->
+        api("org.apache.shiro:shiro-$pkg:$shiroVersion")
+    }
+
+    runtimeOnly "org.hibernate:hibernate-ehcache:5.6.15.Final", {
+        exclude group: 'org.hibernate', module: 'hibernate-core'
+    }
+    runtimeOnly 'org.jboss.spec.javax.transaction:jboss-transaction-api_1.3_spec:2.0.0.Final', {
+        // required for hibernate-ehcache to work with javax variant of hibernate-core excluded
     }
 
     implementation platform("org.apache.grails:grails-bom:$grailsVersion")
@@ -56,6 +52,10 @@ dependencies {
     implementation "org.mindrot:jbcrypt:0.4"
     compileOnly "io.micronaut:micronaut-inject-groovy:4.10.15"
     testCompileOnly "org.mockito:mockito-core"
+
+    testImplementation "org.apache.grails:grails-testing-support-datamapping"
+    testImplementation "org.apache.grails:grails-testing-support-web"
+    testImplementation "org.spockframework:spock-core"
 
 }
 

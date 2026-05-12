@@ -1,4 +1,4 @@
-package grails.plugins.elasticsearch
+package org.grails.plugins.shiro
 
 import groovy.transform.CompileStatic
 

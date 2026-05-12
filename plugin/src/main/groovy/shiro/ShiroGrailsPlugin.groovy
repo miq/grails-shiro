@@ -35,7 +35,6 @@ import jakarta.servlet.DispatcherType
 import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator
 import org.apache.shiro.authz.permission.WildcardPermissionResolver
-import org.apache.shiro.cache.ehcache.EhCacheManager
 import org.apache.shiro.crypto.cipher.AesCipherService
 import org.apache.shiro.grails.*
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO

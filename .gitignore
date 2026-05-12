@@ -4,3 +4,4 @@ out/
 *~
 .idea/
 src/test/app/
+plugin/src/test/fixtures/bin/apacheds-2.0.0.AM25/
