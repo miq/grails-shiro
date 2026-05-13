@@ -26,11 +26,10 @@
             <div class="col-12 col-md-7">
                 <h1 class="display-6 fw-semibold mb-2">Welcome to Grails</h1>
                 <p class="lead text-body-secondary">
-                    Congratulations, you have successfully started a Grails application.
+                    You are currently logged in as <code><shiro:principal property="userName"/></code>.
                 </p>
-                <p class="text-body-secondary">
-                    At the moment this is the default page, feel free to modify it to either
-                    redirect to a controller or display whatever content you may choose.
+                <p>
+                    <a class="btn btn-primary" href="${createLink(controller: 'auth', action: 'signOut')}" title="log out">Logout</a>
                 </p>
             </div>
 

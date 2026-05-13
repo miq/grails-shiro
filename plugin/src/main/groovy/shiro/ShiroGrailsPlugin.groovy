@@ -211,15 +211,10 @@ Enables Grails applications to take advantage of the Apache Shiro security layer
                 loginUrl = grailsApplication.config.getProperty('security.shiro.filter.loginUrl', String, "/auth/login")
                 unauthorizedUrl = grailsApplication.config.getProperty('security.shiro.filter.unauthorizedUrl', String, "/auth/unauthorized")
                 successUrl = grailsApplication.config.getProperty('security.shiro.filter.successUrl')
-                allowAccessByDefault = grailsApplication.config.getProperty('security.shiro.filter.allowAccessByDefault')
+                allowAccessByDefault = grailsApplication.config.getProperty('security.shiro.filter.allowAccessByDefault', Boolean, false)
                 if (grailsApplication.config.getProperty('security.shiro.filter.filterChainDefinitions')) {
                     filterChainDefinitions = grailsApplication.config.getProperty('security.shiro.filter.filterChainDefinitions')
                 }
-                // FIXME: is this the correct way?
-                filterChainDefinitionMap = [
-                        ("/${grailsApplication.config.getProperty('security.shiro.login.controller', String, 'auth')}/**".toString()): DefaultFilter.anon.name(),
-                        '/assets/**' : DefaultFilter.anon.name()
-                ]
 
                 if (enableBasicFilter) {
                     filters = [authcBasic: ref("authcBasicFilter")]

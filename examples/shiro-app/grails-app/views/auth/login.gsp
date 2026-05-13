@@ -25,12 +25,20 @@
   <shiro:isLoggedIn>
     <h2>Logged in</h2>
 
-    <p>You are currently logged in as <shiro:principal property="userName"/>.</p>
-    <a href="${createLink(action: 'signOut')}" title="log out">Logout</a>
+    <p>
+      You are currently logged in as <code><shiro:principal property="userName"/></code>.
+    </p>
+    <p>
+      <a href="/" title="Main page">Main page</a>
+    </p>
+
+    <a class="btn btn-primary" href="${createLink(action: 'signOut')}" title="log out">Logout</a>
   </shiro:isLoggedIn>
 
   <shiro:isNotLoggedIn>
-
+    <p>
+      You can log in to this example application using <code>demo</code> as username with <code>secret</code> as password.
+    </p>
     <g:form action="signIn">
       <fieldset class="form">
         <input type="hidden" name="targetUri" value="${targetUri}"/>

@@ -77,7 +77,15 @@ security:
     filter:
       loginUrl: /auth/login
       successUrl: /
-      allowAccessByDefault: false
+      # We configure shiro to allow anonymous/public access by default. That way we can fully control access using
+      # Grails interceptors, annotations etc.
+      allowAccessByDefault: true
+      # Alternatively we can configure filter chain definitions and use finer grained access control using interceptors
+      # for certain endpoints/controllers only.
+#      filterChainDefinitions: |
+#        /auth/** = anon
+#        /assets/** = anon
+#        /** = authc
 
 ---
 dataSource:
