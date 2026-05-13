@@ -9,11 +9,12 @@ import grails.testing.mixin.integration.Integration
 @Integration
 class ShiroAppSpec extends ContainerGebSpec {
 
-    void 'should display the correct title on the home page'() {
+    void 'should be redirected to login page when visiting the home page'() {
         when: 'visiting the home page'
             go('/')
 
-        then: 'the page title is correct'
-            title == 'Welcome to Grails'
+        then: 'redirected to the login page'
+            currentUrl.endsWith('/auth/login?targetUri=%2F')
+            title == 'Login'
     }
 }

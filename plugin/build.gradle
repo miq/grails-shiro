@@ -21,6 +21,8 @@ dependencies {
         api("org.apache.shiro:shiro-$pkg:$shiroVersion")
     }
 
+    implementation "org.mindrot:jbcrypt:0.4"
+
     runtimeOnly "org.hibernate:hibernate-ehcache:5.6.15.Final", {
         exclude group: 'org.hibernate', module: 'hibernate-core'
     }
@@ -28,7 +30,7 @@ dependencies {
         // required for hibernate-ehcache to work with javax variant of hibernate-core excluded
     }
 
-    compileOnly platform("org.apache.grails:grails-bom:$grailsVersion")
+    implementation platform("org.apache.grails:grails-bom:$grailsVersion")
     compileOnly "org.apache.grails:grails-core"
     compileOnly "org.apache.grails:grails-data-hibernate5"
     compileOnly "org.apache.grails:grails-databinding"
@@ -49,14 +51,11 @@ dependencies {
     compileOnly "org.springframework.boot:spring-boot-starter-tomcat"
     compileOnly "org.springframework.boot:spring-boot-starter-validation"
 
-    implementation "org.mindrot:jbcrypt:0.4"
-    compileOnly "io.micronaut:micronaut-inject-groovy:4.10.15"
     testCompileOnly "org.mockito:mockito-core"
-
+    testImplementation "org.apache.grails:grails-data-hibernate5"
     testImplementation "org.apache.grails:grails-testing-support-datamapping"
     testImplementation "org.apache.grails:grails-testing-support-web"
     testImplementation "org.spockframework:spock-core"
-
 }
 
 bootRun {
