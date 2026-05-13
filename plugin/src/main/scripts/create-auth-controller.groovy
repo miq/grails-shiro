@@ -43,7 +43,7 @@ render template: "artifacts/views/auth/unauthorized.gsp",
         destination: file("grails-app/views/${theModel.modelName}/unauthorized.gsp")
 
 render template: "artifacts/interceptors/AuthInterceptor.groovy",
-        destination: file("grails-app/controllers/${theModel.packagePath}/${theModel.convention('Interceptor')}.groovy"),
+        destination: file("grails-app/controllers/${theModel.packagePath}/interceptors/${theModel.convention('Interceptor')}.groovy"),
         model: [
                 packageName: theModel.packageName,
                 className  : theModel.convention('Interceptor')

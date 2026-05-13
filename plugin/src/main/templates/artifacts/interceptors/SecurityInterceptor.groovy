@@ -13,6 +13,7 @@ class ${className} {
         // Access control by convention.
         accessControl()
     }
+
     void afterView() {
     }
 }

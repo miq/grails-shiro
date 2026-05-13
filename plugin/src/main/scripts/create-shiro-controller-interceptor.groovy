@@ -33,5 +33,5 @@ String name = args[0].replaceAll(/(Controller|Interceptor)/, '') + 'Interceptor'
 Model model = model(name)
 
 render template: "artifacts/interceptors/SecurityInterceptor.groovy",
-        destination: file("grails-app/controllers/${model.packagePath}/${model.className}.groovy"),
+        destination: file("grails-app/controllers/${model.packagePath}/interceptors/${model.className}.groovy"),
         model: model
