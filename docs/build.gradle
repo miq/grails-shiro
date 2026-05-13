@@ -29,7 +29,7 @@ tasks.named('asciidoctor', AsciidoctorTask) {
     attributes(asciidoctorAttributes)
     baseDirFollowsSourceDir()
     options(doctype: 'book')
-    sources { include 'Guide.adoc' }
+    sources { include 'index.adoc' }
     resources {
         from("$sourceDir/resources/images")
         into './resources/images'
