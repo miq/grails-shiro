@@ -84,7 +84,8 @@ extensions.configure(org.apache.grails.gradle.publish.GrailsPublishExtension) {
         it.url = 'https://github.com/grails-plugins'
     }
     it.developers = [
-           pmcneil: 'Peter McNeil'
+            pmcneil: 'Peter McNeil',
+            miq: 'Mihael Koep'
     ]
 }
 
