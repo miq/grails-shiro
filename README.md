@@ -1,3 +1,5 @@
+[![CI](https://github.com/grails-plugins/grails-shiro/actions/workflows/ci.yml/badge.svg)](https://github.com/grails-plugins/grails-shiro/actions/workflows/ci.yml)
+
 # Grails Shiro plugin
 
 ## Versions
