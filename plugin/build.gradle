@@ -1,0 +1,326 @@
+plugins {
+    id 'config.compile'
+    id 'config.grails-plugin'
+    id 'config.publish'
+    id 'config.testing'
+}
+
+// Not Published to Gradle Plugin Portal
+apply plugin: "org.apache.grails.gradle.grails-gsp"
+apply plugin: "org.apache.grails.gradle.grails-plugin"
+
+version = projectVersion
+group = "org.grails.plugins"
+
+dependencies {
+    profile "org.apache.grails.profiles:web-plugin"
+
+    developmentOnly "org.springframework.boot:spring-boot-devtools" // Spring Boot DevTools may cause performance slowdowns or compatibility issues on larger applications
+
+    ['core', 'spring', 'web'].each { pkg ->
+        api("org.apache.shiro:shiro-$pkg:$shiroVersion")
+    }
+
+    implementation "org.mindrot:jbcrypt:0.4"
+
+    runtimeOnly "org.hibernate:hibernate-ehcache:5.6.15.Final", {
+        exclude group: 'org.hibernate', module: 'hibernate-core'
+    }
+    runtimeOnly 'org.jboss.spec.javax.transaction:jboss-transaction-api_1.3_spec:2.0.0.Final', {
+        // required for hibernate-ehcache to work with javax variant of hibernate-core excluded
+    }
+
+    implementation platform("org.apache.grails:grails-bom:$grailsVersion")
+    compileOnly "org.apache.grails:grails-core"
+    compileOnly "org.apache.grails:grails-data-hibernate5"
+    compileOnly "org.apache.grails:grails-databinding"
+    compileOnly "org.apache.grails:grails-events"
+    compileOnly "org.apache.grails:grails-gsp"
+    compileOnly "org.apache.grails:grails-interceptors"
+    compileOnly "org.apache.grails:grails-layout"
+    compileOnly "org.apache.grails:grails-logging"
+    compileOnly "org.apache.grails:grails-rest-transforms"
+    compileOnly "org.apache.grails:grails-scaffolding"
+    compileOnly "org.apache.grails:grails-services"
+    compileOnly "org.apache.grails:grails-url-mappings"
+    compileOnly "org.apache.grails:grails-web-boot"
+    compileOnly "org.springframework.boot:spring-boot-autoconfigure"
+    compileOnly "org.springframework.boot:spring-boot-starter"
+    compileOnly "org.springframework.boot:spring-boot-starter-actuator"
+    compileOnly "org.springframework.boot:spring-boot-starter-logging"
+    compileOnly "org.springframework.boot:spring-boot-starter-tomcat"
+    compileOnly "org.springframework.boot:spring-boot-starter-validation"
+
+    testCompileOnly "org.mockito:mockito-core"
+    testImplementation "org.apache.grails:grails-data-hibernate5"
+    testImplementation "org.apache.grails:grails-testing-support-datamapping"
+    testImplementation "org.apache.grails:grails-testing-support-web"
+    testImplementation "org.spockframework:spock-core"
+}
+
+bootRun {
+    jvmArgs('-Dspring.output.ansi.enabled=always')
+    sourceResources sourceSets.main
+    String springProfilesActive = 'spring.profiles.active'
+    systemProperty springProfilesActive, System.getProperty(springProfilesActive)
+}
+
+// enable if you wish to package this plugin as a standalone application
+bootJar.enabled = false
+
+java {
+    withJavadocJar()
+}
+
+extensions.configure(org.apache.grails.gradle.publish.GrailsPublishExtension) {
+    it.artifactId = project.name
+    it.githubSlug = 'grails-plugins/grails-shiro'
+    it.license.name = 'Apache-2.0'
+    it.title = 'Shiro Grails Plugin'
+    it.desc = 'Secure your Grails application quickly and easily using the Apache Shiro security framework.'
+    it.organization {
+        it.name = 'Grails Plugins'
+        it.url = 'https://github.com/grails-plugins'
+    }
+    it.developers = [
+            pmcneil: 'Peter McNeil',
+            miq: 'Mihael Koep'
+    ]
+}
+
+task shiroTest(type: Test) {
+    dependsOn "publishToMavenLocal"
+    //clean up anything left behind
+    doFirst {
+        delete "$projectDir/src/test/app"
+    }
+
+    doLast {
+        mkdir "$projectDir/src/test/app"
+        exec {
+            workingDir "$projectDir/src/test/app"
+            commandLine 'grails', 'create-app', 'shiro-tester'
+        }
+
+        def fixtures = "$projectDir/src/test/fixtures"
+        def grailsApp = "$projectDir/src/test/app/shiro-tester/grails-app"
+        def testSrc = "$projectDir/src/test/app/shiro-tester/src/"
+
+        copy {
+            from file("$fixtures/BootStrap.groovy")
+            into file("$grailsApp/init/shiro/tester")
+        }
+        copy {
+            from "$fixtures/controllers"
+            into "$grailsApp/controllers"
+        }
+        copy {
+            from "$fixtures/domain"
+            into "$grailsApp/domain"
+        }
+        copy {
+            from "$fixtures/services"
+            into "$grailsApp/services"
+        }
+        copy {
+            from "$fixtures/tests/shiro-tester/integration-test"
+            into "$testSrc/integration-test"
+        }
+
+        //add the plugin
+        File build = new File("$projectDir/src/test/app/shiro-tester/build.gradle")
+        String content = build
+                .text
+                .replaceFirst('\ndependencies \\{', """dependencies {
+    implementation "com.nerderg.plugins:grails-shiro:${version}" 
+    testImplementation "net.sourceforge.htmlunit:htmlunit:2.70.0"
+    testRuntimeOnly 'org.seleniumhq.selenium:htmlunit3-driver:4.26.0'
+    ['ehcache', 'core', 'spring', 'web'].each { pkg ->
+        implementation("org.apache.shiro:shiro-" + pkg + ":${shiroVersion}") {
+            exclude module: 'ejb'
+            exclude module: 'jsf-api'
+            exclude module: 'servlet-api'
+            exclude module: 'jsp-api'
+            exclude module: 'jstl'
+            exclude module: 'jms'
+            exclude module: 'connector-api'
+            exclude module: 'ehcache-core'
+            exclude module: 'slf4j-api'
+            exclude module: 'commons-logging'
+        }
+    }
+""")
+                .replaceAll(/repositories \{/, '''repositories {
+mavenLocal()''')
+                .replaceAll(/chromedriver \{\n *version = '[^']*'/, '''chromedriver {
+            version = '130.0.6723.59\'''')
+                .replace('classpath "gradle.plugin.com.github.erdi.webdriver-binaries:webdriver-binaries-gradle-plugin:2.6"',
+                        'classpath "com.github.erdi:webdriver-binaries-gradle-plugin:3.2"')
+        build.write(content)
+        //add LDAP config
+
+        new File("$grailsApp/conf/application.yml").append('''
+---
+server:
+    servlet:
+        context-path: /rainbow
+---
+security:
+    shiro:
+        rememberMe:
+            cipherKey: 'abcdedfhijklmnopqrstuvwx'
+        realm:
+            ldap:
+                server:
+                    urls: ldap://localhost:10389
+                search:
+                    base: ou=users,dc=example,dc=com
+                    user: uid=admin,ou=system
+                    pass: secret
+                    group:
+                        name: ou=groups,dc=example,dc=com
+                        member:
+                            element: uniqueMember
+                            prefix: uid=
+                    permission:
+                        commonName: cn=permissions
+                        member:
+                            element: uniqueMember
+                            prefix: uid=
+                username:
+                    attribute: uid''')
+
+        File settings = new File("$projectDir/src/test/app/shiro-tester/settings.gradle")
+        settings.write("rootProject.name = 'grails-shiro-tester'")
+
+        exec {
+            workingDir "$projectDir/src/test/app/shiro-tester"
+            commandLine 'grails', 'shiro-quick-start', '--package=com.nerderg.security'
+        }
+        exec {
+            workingDir "$projectDir/src/test/app/shiro-tester"
+            commandLine 'grails', 'generate-all', 'com.nerderg.Book'
+        }
+        exec {
+            workingDir "$projectDir/src/test/app/shiro-tester"
+            commandLine 'grails', 'create-shiro-controller-interceptor', 'com.nerderg.Book'
+        }
+        exec {
+            workingDir "$projectDir/src/test/app/shiro-tester"
+            commandLine 'grails', 'create-ldap-realm', '--package=com.nerderg.security'
+        }
+
+        //delete default failing tests
+        delete "$testSrc/integration-test/groovy/com"
+        delete "$testSrc/test/groovy/com"
+
+        exec {
+            workingDir "$projectDir/src/test/app/shiro-tester"
+            commandLine './gradlew', 'integrationTest'
+        }
+
+        copy {
+            from file("$projectDir/src/test/app/shiro-tester/build/reports/tests")
+            into file("$projectDir/build/reports/tests/integrationtests")
+        }
+
+        delete "$projectDir/src/test/app"
+    }
+}
+
+task shiroCliTest(type: Test) {
+    dependsOn "publishToMavenLocal"
+    //clean up anything left behind
+    doFirst {
+        delete "$projectDir/src/test/app"
+    }
+
+    doLast {
+        mkdir "$projectDir/src/test/app"
+        exec {
+            workingDir "$projectDir/src/test/app"
+            commandLine 'grails', 'create-app', 'cli-tester'
+        }
+
+        def fixtures = "$projectDir/src/test/fixtures"
+        def testSrc = "$projectDir/src/test/app/cli-tester/src/"
+
+        copy {
+            from file("$fixtures/tests/cli-tester/unit-test")
+            into file("$testSrc/test")
+        }
+
+        File build = new File("$projectDir/src/test/app/cli-tester/build.gradle")
+        String content = build
+                .text
+                .replaceFirst('\ndependencies \\{', """dependencies {
+    implementation "com.nerderg.plugins:grails-shiro:${version}"
+    ['ehcache', 'core', 'spring', 'web'].each { pkg ->
+        implementation("org.apache.shiro:shiro-" + pkg + ":${shiroVersion}") {
+            exclude module: 'ejb'
+            exclude module: 'jsf-api'
+            exclude module: 'servlet-api'
+            exclude module: 'jsp-api'
+            exclude module: 'jstl'
+            exclude module: 'jms'
+            exclude module: 'connector-api'
+            exclude module: 'ehcache-core'
+            exclude module: 'slf4j-api'
+            exclude module: 'commons-logging'
+        }
+    }
+ """)
+                .replaceAll(/repositories \{/, '''repositories {
+mavenLocal()''')
+                .replaceAll(/chromedriver \{\n *version = '[^']*'/, '''chromedriver {
+            version = '130.0.6723.59\'''')
+                .replace('classpath "gradle.plugin.com.github.erdi.webdriver-binaries:webdriver-binaries-gradle-plugin:2.6"', 'classpath "com.github.erdi:webdriver-binaries-gradle-plugin:3.2"')
+        build.write(content)
+
+        File settings = new File("$projectDir/src/test/app/cli-tester/settings.gradle")
+        settings.write("rootProject.name = 'grails-shiro-cli-tester'")
+
+        exec {
+            workingDir "$projectDir/src/test/app/cli-tester"
+            commandLine './gradlew', 'test'
+        }
+
+        copy {
+            from file("$projectDir/src/test/app/cli-tester/build/reports/tests")
+            into file("$projectDir/build/reports/tests/clitests")
+        }
+
+        delete "$projectDir/src/test/app"
+
+    }
+}
+
+//This needs to be last to work as expected.
+tasks.withType(Test) {
+//    ensure the LDAP server is running
+    doFirst {
+        println "Starting LDAP server"
+        copy {
+            from zipTree("src/test/fixtures/bin/apacheds-2.0.0.AM25.zip")
+            into "src/test/fixtures/bin"
+        }
+        exec {
+            workingDir projectDir
+            commandLine 'src/test/fixtures/bin/apacheds-2.0.0.AM25/bin/apacheds.sh', 'start'
+        }
+        sleep(10000) //wait for the server to start on slower machines
+    }
+
+    doLast {
+        println "Stoping LDAP server"
+        try {
+            exec {
+                workingDir projectDir
+                commandLine 'src/test/fixtures/bin/apacheds-2.0.0.AM25/bin/apacheds.sh', 'stop'
+            }
+        } catch (e) {
+            println(e)
+        }
+        delete "src/test/fixtures/bin/apacheds-2.0.0.AM25"
+    }
+}
