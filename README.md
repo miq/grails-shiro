@@ -4,6 +4,7 @@
 
 ## Versions
 
+* 6.0.0 This is the latest plugin release targetting Grails 7+ and using Shiro 3.x.
 * 5.0.0 This is the Grails Shiro plugin for *Grails version 5+ and Shiro 2.0.1*.
 * Older released versions 3.4 and 4.4.
 * Version 4.5.9 supports Grails 4 with shiro 1.13.0 not released on maven, you can download the branch and
@@ -18,20 +19,16 @@ https://github.com/nerdErg/grails-shiro/blob/master/docs/Guide.adoc[Guide] in th
 
 ### Numbering
 
-In general the version number is following the Grails major version it supports, then release. e.g.
+Since v6.0.0 we are trying to simplify versioning. The plugin version is neither tied to the Grails release nor the Apache Shiro release used. We try to follow the rules of semantic versioning.
+
+
+Versions up to 5.0.0 used in general the Grails major version it supports, followed by the plugin release. e.g.
 
 ```
 5.0.0 = Grails 5 plugin release 0
 3.4 = Grails 3 plugin release 4
 4.5.9 = Grails 4 plugin release 5.9
 ```
-
-### Maintenance
-
-We are working on a Grails 7 plugin.
-
-The Grails 5 plugin will be maintained to match shiro releases where possible and bugs fixed.
-We will add some extra AD LDAP support too.
 
 ### Documentation and Source
 
@@ -47,7 +44,7 @@ dependencies {
 ```
 
 
-For Grails 5 use: 
+For Grails 5/6 use: 
 ```
 //include the shiro dependency, required in Gradle 5+
 ['ehcache', 'core', 'spring', 'web'].each { pkg ->
@@ -99,6 +96,11 @@ See: https://github.com/nerdErg/grails-shiro/blob/master/docs/Guide.adoc#create-
 which will add https://github.com/nerdErg/grails-shiro/blob/master/docs/Guide.adoc#permission-string-conventions[access control by convention].
 
 ## Version change log
+
+### version 6.0.0
+* upgrade to Grails 7.x
+* upgrade to Shiro 3.0.x
+* upgrade to modern multi-project gradle build
 
 ### version 5.0.0
 
