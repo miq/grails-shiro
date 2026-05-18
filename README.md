@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/org.grails.plugins/grails-shiro)](https://central.sonatype.com/artifact/org.grails.plugins/grails-shiro)
+[![License](https://img.shields.io/github/license/grails-plugins/grails-shiro)](https://www.apache.org/licenses/LICENSE-2.0)
 [![CI](https://github.com/grails-plugins/grails-shiro/actions/workflows/ci.yml/badge.svg)](https://github.com/grails-plugins/grails-shiro/actions/workflows/ci.yml)
 
 # Grails Shiro plugin
@@ -32,7 +34,7 @@ Versions up to 5.0.0 used in general the Grails major version it supports, follo
 
 ### Documentation and Source
 
-In general the documentation applies to all versions of the plugin. Source code including specific documentation for older Grails versions can be found in the *Branches*.
+Please find the https://grails-plugins.github.io/grails-shiro/[documentation] on the plugin page. Source code including specific documentation for older Grails versions can be found in the *Branches*.
 
 ## Installation
 
